@@ -1,0 +1,63 @@
+#trust-coupons-overlay {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483647;
+  width: min(360px, calc(100vw - 32px));
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: oklch(20% 0.03 230);
+}
+
+#trust-coupons-overlay .tc-panel {
+  display: grid;
+  gap: 10px;
+  border: 1px solid oklch(83% 0.03 145);
+  border-radius: 8px;
+  background: oklch(98% 0.01 120);
+  box-shadow: 0 18px 40px oklch(20% 0.03 230 / 22%);
+  padding: 14px;
+}
+
+#trust-coupons-overlay .tc-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#trust-coupons-overlay p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+#trust-coupons-overlay .tc-disclosure {
+  color: oklch(42% 0.04 230);
+}
+
+#trust-coupons-overlay button {
+  border: 1px solid oklch(72% 0.04 145);
+  border-radius: 6px;
+  background: oklch(30% 0.12 145);
+  color: oklch(98% 0.01 120);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+#trust-coupons-overlay .tc-actions {
+  display: flex;
+  gap: 8px;
+}
+
+#trust-coupons-overlay .tc-actions button {
+  flex: 1;
+}
+
+#trust-coupons-overlay .tc-close {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+#trust-coupons-overlay details {
+  font-size: 12px;
+}

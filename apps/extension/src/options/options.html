@@ -1,0 +1,22 @@
+<main>
+  <h1>Privacy</h1>
+  <label>
+    API base URL
+    <input id="apiBaseUrl" />
+  </label>
+  <fieldset>
+    <legend>Telemetry mode</legend>
+    <label><input type="radio" name="privacyMode" value="minimal" /> Minimal telemetry</label>
+    <label><input type="radio" name="privacyMode" value="local_only" /> Local-only mode</label>
+    <label><input type="radio" name="privacyMode" value="advanced_opt_in" /> Advanced diagnostics opt-in</label>
+  </fieldset>
+  <section>
+    <h2>What default telemetry sends</h2>
+    <p>Anonymous merchant id, coupon attempt result, savings amount, adapter id, and extension version.</p>
+    <h2>What it never sends</h2>
+    <p>Personal details, payment data, full cart contents, unrelated browsing history, or sellable profiles.</p>
+  </section>
+  <button id="save">Save</button>
+  <p id="status"></p>
+  <script type="module" src="./options.ts"></script>
+</main>

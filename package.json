@@ -1,0 +1,30 @@
+{
+  "name": "trust-coupons",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Trust-first coupon tester extension and home-server API for CZ/EU merchants.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build:packages && npm run build -w @trust-coupons/api && npm run build -w @trust-coupons/admin && npm run build -w @trust-coupons/extension",
+    "build:packages": "npm run build -w @trust-coupons/shared && npm run build -w @trust-coupons/config && npm run build -w @trust-coupons/adapters",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run build:packages && npm run test --workspaces --if-present",
+    "test:unit": "vitest run",
+    "dev:api": "npm run dev -w @trust-coupons/api",
+    "dev:extension": "npm run dev -w @trust-coupons/extension",
+    "worker": "npm run worker -w @trust-coupons/api",
+    "seed:coupons": "npm run seed:coupons -w @trust-coupons/api",
+    "validate:manifest": "node scripts/validate-manifest.mjs"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.1",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  }
+}

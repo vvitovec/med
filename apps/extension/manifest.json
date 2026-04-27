@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Trust Coupons",
+  "version": "0.1.0",
+  "description": "Trust-first coupon tester for selected CZ/EU merchants. Savings and success rate outrank affiliate incentives.",
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Trust Coupons"
+  },
+  "options_page": "src/options/options.html",
+  "background": {
+    "service_worker": "assets/background.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://coupons-api.vvitovec.com/*", "http://localhost:3100/*"],
+  "optional_host_permissions": [
+    "https://*.alza.cz/*",
+    "https://*.notino.cz/*",
+    "https://*.zalando.cz/*",
+    "https://*.zalando.de/*",
+    "https://*.aboutyou.cz/*",
+    "https://*.aboutyou.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.alza.cz/*",
+        "https://*.notino.cz/*",
+        "https://*.zalando.cz/*",
+        "https://*.zalando.de/*",
+        "https://*.aboutyou.cz/*",
+        "https://*.aboutyou.com/*"
+      ],
+      "js": ["assets/content.js"],
+      "css": ["assets/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "minimum_chrome_version": "116"
+}

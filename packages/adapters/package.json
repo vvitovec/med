@@ -1,0 +1,29 @@
+{
+  "name": "@trust-coupons/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@trust-coupons/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  }
+}

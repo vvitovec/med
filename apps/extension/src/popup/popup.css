@@ -1,0 +1,43 @@
+body {
+  width: 320px;
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: oklch(20% 0.03 230);
+  background: oklch(98% 0.01 120);
+}
+
+#app {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+#state {
+  color: oklch(38% 0.12 145);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.small {
+  color: oklch(44% 0.04 230);
+  font-size: 12px;
+}
+
+button {
+  width: 100%;
+  border: 1px solid oklch(72% 0.04 145);
+  border-radius: 6px;
+  background: oklch(30% 0.12 145);
+  color: oklch(98% 0.01 120);
+  padding: 10px;
+}

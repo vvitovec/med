@@ -1,0 +1,52 @@
+[
+  {
+    "merchantSlug": "notino",
+    "region": "CZ",
+    "code": "SALE",
+    "title": "Až 20 % na vybrané značky a produkty",
+    "description": "Official Notino coupon page listed code sale for selected brands/products. Excludes sale/clearance products.",
+    "status": "active",
+    "source": "curated",
+    "sourceConfidence": 0.9,
+    "sourceUrl": "https://www.notino.cz/slevove-kupony-a-kody-notino/",
+    "currency": "CZK",
+    "merchantConstraints": [
+      "Selected brands/products only",
+      "Excludes products already in sale or clearance",
+      "Must be verified in checkout before considered best"
+    ]
+  },
+  {
+    "merchantSlug": "about-you",
+    "region": "EU",
+    "code": "TYOU",
+    "title": "Reported 10 % About You coupon",
+    "description": "Discovered on a coupon aggregator with stated validity to 31 July 2026. Keep pending until verified against checkout.",
+    "status": "pending",
+    "source": "community",
+    "sourceConfidence": 0.35,
+    "expiresAt": "2026-07-31T21:59:59.000Z",
+    "sourceUrl": "https://www.oxikupony.com/view/aboutyou/",
+    "currency": "EUR",
+    "merchantConstraints": [
+      "Unverified aggregator source",
+      "May exclude brands/categories"
+    ]
+  },
+  {
+    "merchantSlug": "zalando",
+    "region": "EU",
+    "code": "DZ20",
+    "title": "Expired reported Zalando 15 % coupon",
+    "description": "Discovered as expired historical coupon. Stored only as rejected intelligence; not promoted to users.",
+    "status": "rejected",
+    "source": "community",
+    "sourceConfidence": 0.1,
+    "expiresAt": "2026-03-01T22:59:59.000Z",
+    "sourceUrl": "https://kodyo.cz/kupony/zalando/",
+    "currency": "EUR",
+    "merchantConstraints": [
+      "Expired before V1 launch"
+    ]
+  }
+]

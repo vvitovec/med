@@ -1,0 +1,48 @@
+# Project-scoped MCP overrides for /Users/viktorvitovec/Documents/Local/Projekty/Med.
+# Global MCP definitions stay in ~/.codex/config.toml; this file only changes
+# which of those servers are enabled while working in this project.
+
+[mcp_servers.playwright]
+enabled = true
+
+[mcp_servers.context_7]
+enabled = true
+
+[mcp_servers.vercel]
+enabled = true
+
+[mcp_servers.cloudflare-api]
+enabled = true
+
+[mcp_servers.supabase_home]
+enabled = true
+
+[mcp_servers.abra_gen]
+enabled = false
+
+[mcp_servers.render]
+enabled = false
+
+[mcp_servers.shadcn]
+enabled = false
+
+[mcp_servers.storybook]
+enabled = false
+
+[mcp_servers.notion]
+enabled = false
+
+[mcp_servers.railway]
+enabled = false
+
+[mcp_servers.supabase_account_1]
+enabled = false
+
+[mcp_servers.supabase_account_2]
+enabled = false
+
+[mcp_servers.supabase_account_3]
+enabled = false
+
+[mcp_servers.flexi]
+enabled = false

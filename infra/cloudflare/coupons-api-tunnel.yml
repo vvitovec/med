@@ -1,0 +1,9 @@
+# Cloudflare Tunnel ingress for the home server.
+# Install this on the home server after creating/provisioning the tunnel credentials.
+tunnel: trust-coupons
+credentials-file: /etc/cloudflared/trust-coupons.json
+
+ingress:
+  - hostname: coupons-api.vvitovec.com
+    service: http://127.0.0.1:3100
+  - service: http_status:404

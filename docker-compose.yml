@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    env_file:
+      - apps/api/.env
+    network_mode: host
+    restart: unless-stopped
+    command: ["node", "apps/api/dist/server.js"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    env_file:
+      - apps/api/.env
+    network_mode: host
+    restart: unless-stopped
+    command: ["node", "apps/api/dist/worker/run-worker.js"]
