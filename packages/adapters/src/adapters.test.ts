@@ -34,4 +34,25 @@ describe("merchant adapters", () => {
     const document = doc('<button data-testid="HeaderCouponWalletButton" aria-label="Otevřít kupónovou peněženku">1</button>');
     expect(aboutYouAdapter.detect(new URL("https://www.aboutyou.cz/checkout/basket"), document)).toBe(true);
   });
+
+  it("opens collapsed Notino coupon fields before applying a code", async () => {
+    const document = doc(`
+      <button id="reveal">Zadat slevový kód</button>
+      <span class="total">2 860 Kč</span>
+    `);
+    document.getElementById("reveal")?.addEventListener("click", () => {
+      document.body.insertAdjacentHTML("beforeend", `
+        <input placeholder="Zadejte číslo kupónu" />
+        <button id="apply">Použít</button>
+      `);
+      document.getElementById("apply")?.addEventListener("click", () => {
+        document.querySelector(".total")!.textContent = "2 288 Kč";
+      });
+    });
+
+    const result = await notinoAdapter.applyCoupon(document, "SALE");
+
+    expect(result.result).toBe("success");
+    expect((document.querySelector("input") as HTMLInputElement).value).toBe("SALE");
+  });
 });

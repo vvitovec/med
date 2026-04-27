@@ -76,7 +76,17 @@ export function createHeuristicAdapter(config: {
     },
     async applyCoupon(document, code): Promise<CouponApplicationResult> {
       const before = this.readTotal(document) ?? undefined;
-      const input = this.findCouponInput(document);
+      let input = this.findCouponInput(document);
+      if (!input) {
+        const reveal =
+          (config.selectors.couponRevealSelectors
+            ? firstElement<HTMLElement>(document, config.selectors.couponRevealSelectors)
+            : null) ??
+          firstButtonByText(document, [/zadat.*slev/i, /slevov.*k[oó]d/i, /coupon/i, /voucher/i, /promo/i]);
+        reveal?.click();
+        await new Promise((resolve) => setTimeout(resolve, 350));
+        input = this.findCouponInput(document);
+      }
       const button = this.findApplyButton(document);
       if (!input || !button) {
         return {
@@ -87,8 +97,9 @@ export function createHeuristicAdapter(config: {
       }
       input.focus();
       input.value = code;
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      const EventCtor = input.ownerDocument.defaultView?.Event ?? Event;
+      input.dispatchEvent(new EventCtor("input", { bubbles: true }));
+      input.dispatchEvent(new EventCtor("change", { bubbles: true }));
       button.click();
       await new Promise((resolve) => setTimeout(resolve, 700));
       const after = this.readTotal(document) ?? undefined;
