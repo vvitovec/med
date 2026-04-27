@@ -98,6 +98,8 @@ Jobs can be triggered from `/api/admin/jobs/:name` and are processed by `npm run
    npm run test
    npm run build
    npm run validate:manifest
+   npm run test:extension:live
+   npm run package:extension
    ```
 
 2. Verify:
@@ -108,9 +110,11 @@ Jobs can be triggered from `/api/admin/jobs/:name` and are processed by `npm run
    - visible affiliate disclosure
    - Local-only mode blocks telemetry
 
-3. Zip `apps/extension/dist`.
+3. Upload `trust-coupons-extension-v0.1.0.zip`.
 
 4. Submit to Chrome Web Store with privacy disclosures matching `GET /api/v1/privacy/export`.
+
+See `docs/chrome-web-store-release.md` for the full V1 checklist.
 
 ## Backup Checks
 

@@ -33,4 +33,13 @@ for (const path of [
   }
 }
 
+for (const script of manifest.content_scripts?.flatMap((entry) => entry.js ?? []) ?? []) {
+  const builtPath = `apps/extension/dist/${script}`;
+  if (!existsSync(builtPath)) continue;
+  const content = readFileSync(builtPath, "utf8");
+  if (/^\s*import\s/m.test(content) || /\bimport\(/.test(content)) {
+    throw new Error(`Content script must be self-contained classic JS, not an ES module: ${script}`);
+  }
+}
+
 console.log("Manifest validation passed.");

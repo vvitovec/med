@@ -30,5 +30,6 @@ export interface AdapterSelectors {
   checkoutPathHints: string[];
   couponInputSelectors: string[];
   applyButtonSelectors: string[];
+  couponAreaSelectors?: string[];
   totalSelectors: string[];
 }

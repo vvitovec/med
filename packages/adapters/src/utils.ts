@@ -2,10 +2,31 @@ import type { AdapterSelectors, CouponApplicationResult, CouponTotal, MerchantAd
 
 export function firstElement<T extends Element>(document: Document, selectors: string[]): T | null {
   for (const selector of selectors) {
-    const element = document.querySelector<T>(selector);
+    let element: T | null = null;
+    try {
+      element = document.querySelector<T>(selector);
+    } catch {
+      element = null;
+    }
     if (element) return element;
   }
   return null;
+}
+
+export function firstButtonByText(document: Document, patterns: RegExp[]): HTMLElement | null {
+  const buttons = [...document.querySelectorAll<HTMLElement>("button, a, [role='button']")];
+  return buttons.find((button) => {
+    const haystack = [
+      button.textContent,
+      button.getAttribute("aria-label"),
+      button.getAttribute("data-testid"),
+      button.id,
+      button.className
+    ]
+      .filter(Boolean)
+      .join(" ");
+    return patterns.some((pattern) => pattern.test(haystack));
+  }) ?? null;
 }
 
 export function readPriceMinor(text: string): CouponTotal | null {
@@ -23,6 +44,7 @@ export function createHeuristicAdapter(config: {
   id: string;
   merchantSlug: string;
   displayName: string;
+  region?: MerchantAdapter["region"];
   domains: string[];
   selectors: AdapterSelectors;
   canAutoApply?: boolean;
@@ -31,20 +53,22 @@ export function createHeuristicAdapter(config: {
     id: config.id,
     merchantSlug: config.merchantSlug,
     displayName: config.displayName,
-    region: "CZ",
+    region: config.region ?? "CZ",
     domains: config.domains,
     canAutoApply: config.canAutoApply ?? true,
     detect(url, document) {
       const hostMatched = config.domains.some((domain) => url.hostname === domain || url.hostname.endsWith(`.${domain}`));
       if (!hostMatched) return false;
       return config.selectors.checkoutPathHints.some((hint) => url.pathname.toLowerCase().includes(hint)) ||
+        Boolean(config.selectors.couponAreaSelectors && firstElement(document, config.selectors.couponAreaSelectors)) ||
         Boolean(this.findCouponInput(document));
     },
     findCouponInput(document) {
       return firstElement<HTMLInputElement | HTMLTextAreaElement>(document, config.selectors.couponInputSelectors);
     },
     findApplyButton(document) {
-      return firstElement<HTMLElement>(document, config.selectors.applyButtonSelectors);
+      return firstElement<HTMLElement>(document, config.selectors.applyButtonSelectors) ??
+        firstButtonByText(document, [/apply/i, /uplat/i, /použ/i, /pouzit/i, /vložit/i, /vlozit/i]);
     },
     readTotal(document) {
       const element = firstElement<HTMLElement>(document, config.selectors.totalSelectors);

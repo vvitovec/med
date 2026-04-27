@@ -43,11 +43,18 @@ h2 {
 }
 
 input,
+select,
+textarea,
 button {
   border: 1px solid oklch(78% 0.03 130);
   border-radius: 6px;
   padding: 10px 12px;
   font: inherit;
+}
+
+textarea {
+  min-height: 74px;
+  resize: vertical;
 }
 
 button {
@@ -96,6 +103,17 @@ article span,
   gap: 8px;
 }
 
+.coupon-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.coupon-form textarea,
+.coupon-form button {
+  grid-column: span 2;
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -105,4 +123,22 @@ article span,
 
 .actions {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+@media (max-width: 760px) {
+  header,
+  .auth {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .coupon-form,
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .coupon-form textarea,
+  .coupon-form button {
+    grid-column: auto;
+  }
 }

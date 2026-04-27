@@ -18,7 +18,7 @@
   },
   {
     "merchantSlug": "about-you",
-    "region": "EU",
+    "region": "CZ",
     "code": "TYOU",
     "title": "Reported 10 % About You coupon",
     "description": "Discovered on a coupon aggregator with stated validity to 31 July 2026. Keep pending until verified against checkout.",
@@ -27,10 +27,58 @@
     "sourceConfidence": 0.35,
     "expiresAt": "2026-07-31T21:59:59.000Z",
     "sourceUrl": "https://www.oxikupony.com/view/aboutyou/",
-    "currency": "EUR",
+    "currency": "CZK",
     "merchantConstraints": [
       "Unverified aggregator source",
       "May exclude brands/categories"
+    ]
+  },
+  {
+    "merchantSlug": "alza",
+    "region": "CZ",
+    "code": "ALZADNY10",
+    "title": "10 % na vybrané zboží označené kódem",
+    "description": "Official Alza category page lists products where code ALZADNY10 applies in cart.",
+    "status": "active",
+    "source": "curated",
+    "sourceConfidence": 0.85,
+    "sourceUrl": "https://www.alza.cz/hracky/spolecenske-deskove-hry/slevy-kody-cashbacky/18900382-e29.htm",
+    "currency": "CZK",
+    "merchantConstraints": [
+      "Selected products only",
+      "Must be verified in checkout before considered best"
+    ]
+  },
+  {
+    "merchantSlug": "alza",
+    "region": "CZ",
+    "code": "ALZADNY15",
+    "title": "15 % na vybrané zboží označené kódem",
+    "description": "Official Alza category page lists products where code ALZADNY15 applies in cart.",
+    "status": "active",
+    "source": "curated",
+    "sourceConfidence": 0.85,
+    "sourceUrl": "https://www.alza.cz/hracky/spolecenske-deskove-hry/slevy-kody-cashbacky/18900382-e29.htm",
+    "currency": "CZK",
+    "merchantConstraints": [
+      "Selected products only",
+      "Must be verified in checkout before considered best"
+    ]
+  },
+  {
+    "merchantSlug": "zalando",
+    "region": "CZ",
+    "code": "PRORADOST",
+    "title": "Extra -15 % na již zlevněnou módu",
+    "description": "Official Zalando cart banner advertised extra 15% off already discounted fashion with code PRORADOST.",
+    "status": "active",
+    "source": "curated",
+    "sourceConfidence": 0.85,
+    "sourceUrl": "https://www.zalando.cz/cart/",
+    "currency": "CZK",
+    "merchantConstraints": [
+      "Already discounted fashion only",
+      "Must be verified in checkout before considered best"
     ]
   },
   {

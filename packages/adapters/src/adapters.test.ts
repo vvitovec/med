@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
-import { alzaAdapter, notinoAdapter } from "./index.js";
+import { aboutYouAdapter, alzaAdapter, notinoAdapter } from "./index.js";
 
 function doc(html: string) {
   return new JSDOM(html).window.document;
@@ -23,5 +23,15 @@ describe("merchant adapters", () => {
     await expect(alzaAdapter.applyCoupon(document, "TEST")).resolves.toMatchObject({
       result: "failed_checkout_changed"
     });
+  });
+
+  it("detects Alza live cart path", () => {
+    const document = doc("<main><h1>Košík</h1></main>");
+    expect(alzaAdapter.detect(new URL("https://www.alza.cz/Order1.htm"), document)).toBe(true);
+  });
+
+  it("detects About You coupon wallet surfaces", () => {
+    const document = doc('<button data-testid="HeaderCouponWalletButton" aria-label="Otevřít kupónovou peněženku">1</button>');
+    expect(aboutYouAdapter.detect(new URL("https://www.aboutyou.cz/checkout/basket"), document)).toBe(true);
   });
 });

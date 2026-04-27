@@ -13,8 +13,9 @@
     "type": "module"
   },
   "permissions": ["activeTab", "storage"],
-  "host_permissions": ["https://coupons-api.vvitovec.com/*", "http://localhost:3100/*"],
-  "optional_host_permissions": [
+  "host_permissions": [
+    "https://coupons-api.vvitovec.com/*",
+    "http://localhost:3100/*",
     "https://*.alza.cz/*",
     "https://*.notino.cz/*",
     "https://*.zalando.cz/*",

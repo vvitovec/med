@@ -1,8 +1,44 @@
 import { adapterForUrl } from "@trust-coupons/adapters";
-import type { RankedCoupon } from "@trust-coupons/shared";
-import { getCoupons, recordAttempt, resolveMerchant } from "../shared/api.js";
-import { loadSettings } from "../shared/settings.js";
+import type { CouponAttempt, MerchantSupportStatus, PrivacyMode, RankedCoupon } from "@trust-coupons/shared";
 import "./overlay.css";
+
+const defaultSettings = {
+  apiBaseUrl: "https://coupons-api.vvitovec.com",
+  privacyMode: "minimal" as PrivacyMode
+};
+
+async function loadContentSettings() {
+  const stored = await chrome.storage.sync.get(defaultSettings);
+  return { ...defaultSettings, ...stored };
+}
+
+async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const settings = await loadContentSettings();
+  const response = await fetch(`${settings.apiBaseUrl}${path}`, {
+    ...init,
+    headers: {
+      "content-type": "application/json",
+      ...(init?.headers ?? {})
+    }
+  });
+  if (!response.ok) throw new Error(`API ${response.status}`);
+  return response.json() as Promise<T>;
+}
+
+async function resolveMerchant(domain: string) {
+  return apiRequest<MerchantSupportStatus>(`/api/v1/merchants/resolve?domain=${encodeURIComponent(domain)}`);
+}
+
+async function getCoupons(merchantId: string, region: "CZ" | "EU" | "US") {
+  return apiRequest<{ coupons: RankedCoupon[] }>(`/api/v1/coupons?merchantId=${merchantId}&region=${region}`);
+}
+
+async function recordAttempt(attempt: CouponAttempt) {
+  return apiRequest<{ ok: boolean; stored: boolean }>("/api/v1/coupon-attempts", {
+    method: "POST",
+    body: JSON.stringify(attempt)
+  });
+}
 
 async function init() {
   const adapter = adapterForUrl(new URL(location.href), document);
@@ -58,7 +94,7 @@ async function testCoupons(root: HTMLElement, coupons: RankedCoupon[], merchantI
     stopped = true;
     progress.textContent = "Stopping after the current coupon.";
   }, { once: true });
-  const settings = await loadSettings();
+  const settings = await loadContentSettings();
   let best: { code: string; savings: number } | null = null;
   for (const ranked of coupons.slice(0, 5)) {
     if (stopped) break;

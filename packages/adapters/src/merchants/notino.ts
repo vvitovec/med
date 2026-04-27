@@ -10,10 +10,21 @@ export const notinoAdapter = createHeuristicAdapter({
     couponInputSelectors: [
       'input[name*="voucher" i]',
       'input[name*="coupon" i]',
+      'input[id*="voucher" i]',
+      'input[id*="coupon" i]',
       'input[placeholder*="slev" i]',
-      'input[placeholder*="promo" i]'
+      'input[placeholder*="promo" i]',
+      'input[placeholder*="kód" i]',
+      'input[placeholder*="kod" i]'
     ],
-    applyButtonSelectors: ['button[type="submit"]', 'button[data-testid*="voucher" i]', 'button[class*="coupon" i]'],
+    applyButtonSelectors: [
+      'button[type="submit"]',
+      'button[data-testid*="voucher" i]',
+      'button[data-testid*="coupon" i]',
+      'button[class*="coupon" i]',
+      'button[class*="voucher" i]'
+    ],
+    couponAreaSelectors: ['[data-testid*="voucher" i]', '[data-testid*="coupon" i]', '[class*="voucher" i]', '[class*="coupon" i]'],
     totalSelectors: ['[data-testid*="total" i]', '[class*="summary" i] [class*="price" i]', '[class*="total" i]']
   }
 });

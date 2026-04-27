@@ -15,13 +15,16 @@
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run build:packages && npm run test --workspaces --if-present",
     "test:unit": "vitest run",
+    "test:extension:live": "playwright test e2e/live-extension.spec.ts --reporter=line",
     "dev:api": "npm run dev -w @trust-coupons/api",
     "dev:extension": "npm run dev -w @trust-coupons/extension",
     "worker": "npm run worker -w @trust-coupons/api",
     "seed:coupons": "npm run seed:coupons -w @trust-coupons/api",
-    "validate:manifest": "node scripts/validate-manifest.mjs"
+    "validate:manifest": "node scripts/validate-manifest.mjs",
+    "package:extension": "npm run build -w @trust-coupons/extension && rm -f trust-coupons-extension-v0.1.0.zip && cd apps/extension/dist && zip -qr ../../../trust-coupons-extension-v0.1.0.zip ."
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/jsdom": "^28.0.1",
     "@types/node": "^22.15.3",
     "typescript": "^5.8.3",

@@ -8,7 +8,7 @@ describe("manifest compliance", () => {
     expect(manifest.manifest_version).toBe(3);
     expect(manifest.permissions).toContain("activeTab");
     expect(JSON.stringify(manifest.host_permissions)).not.toContain("<all_urls>");
-    expect(JSON.stringify(manifest.optional_host_permissions)).not.toContain("<all_urls>");
+    expect(JSON.stringify(manifest.optional_host_permissions ?? [])).not.toContain("<all_urls>");
   });
 
   it("does not allow remote executable code permissions", () => {
