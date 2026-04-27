@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import type { Coupon } from "@trust-coupons/shared";
 import { CouponSchema } from "@trust-coupons/shared";
@@ -28,7 +29,9 @@ async function main() {
   const env = loadApiEnv();
   const repo = PostgresRepository.fromConnectionString(env.ADMIN_DATABASE_URL ?? env.DATABASE_URL);
   const merchants = await repo.listMerchants();
-  const sourcePath = resolve(process.cwd(), "data/discovered-coupons.json");
+  const sourcePath =
+    process.env.COUPON_SEED_PATH ??
+    resolve(dirname(fileURLToPath(import.meta.url)), "../../../../data/discovered-coupons.json");
   const discoveries = DiscoverySchema.parse(JSON.parse(await readFile(sourcePath, "utf8")));
 
   for (const discovery of discoveries) {

@@ -106,7 +106,8 @@ export class PostgresRepository implements TrustCouponsRepository {
         starts_at, expires_at, last_verified_at, success_rate_30d, observed_savings_minor,
         observed_final_total_minor, currency, affiliate_network, affiliate_disclosure, source_url, merchant_constraints
       ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
-      on conflict (id) do update set
+      on conflict (merchant_id, code) do update set
+        id = coupons.id,
         merchant_id = excluded.merchant_id,
         region = excluded.region,
         code = excluded.code,

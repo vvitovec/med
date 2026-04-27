@@ -7,7 +7,7 @@ services:
       - config/app.env
     network_mode: host
     restart: unless-stopped
-    command: ["node", "apps/api/dist/server.js"]
+    command: ["node", "apps/api/dist/src/server.js"]
 
   worker:
     build:
@@ -17,4 +17,4 @@ services:
       - config/worker.env
     network_mode: host
     restart: unless-stopped
-    command: ["node", "apps/api/dist/worker/run-worker.js"]
+    command: ["node", "apps/api/dist/src/worker/run-worker.js"]

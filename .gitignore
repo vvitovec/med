@@ -7,6 +7,8 @@ coverage
 .env.*
 !.env.example
 !.env.local.example
+config/*.env
+!config/*.env.example
 apps/extension/.output
 apps/extension/build
 playwright-report
