@@ -12,7 +12,8 @@
 
    ```bash
    cp .env.example .env
-   cp apps/api/.env.example apps/api/.env
+   cp config/app.env.example config/app.env
+   cp config/worker.env.example config/worker.env
    cp apps/extension/.env.example apps/extension/.env
    ```
 
@@ -60,23 +61,18 @@ The API listens on `127.0.0.1:3100` or `0.0.0.0:3100` depending on `API_HOST`, t
 
 ## Cloudflare Activation
 
-The Cloudflare zone `vvitovec.com` exists and is active. No `coupons-api.vvitovec.com` DNS record was present during implementation, and no `trust-coupons` tunnel credentials were available locally.
-
 Cloudflare status from local MCP activation:
 
 - `coupons-api.vvitovec.com` DNS CNAME was created.
 - The healthy `supabase-home-platform` tunnel now includes `coupons-api.vvitovec.com -> http://127.0.0.1:3100`.
 - Cloudflare Access app `Trust Coupons Admin` protects `/api/admin*` and `/admin*` for `vvitovec27@gmail.com`.
+- Cloudflare rate limiting is active for `POST /api/v1/coupon-attempts` and `POST /api/v1/submissions`.
+  - Current free-plan limit: `10 requests / 10 seconds`, `10 seconds` mitigation.
 
 Remaining manual/server steps:
 
 1. Confirm the API container is listening on `127.0.0.1:3100` on the same host where the Cloudflare tunnel connector runs.
-2. Add WAF/rate limit rules for:
-
-   - `POST /api/v1/coupon-attempts`
-   - `POST /api/v1/submissions`
-
-The current Cloudflare API token could create DNS, tunnel config, and Access, but could not manage Rulesets/WAF. Add Cloudflare token permissions for Zone Rulesets edit/read or configure the rate limit in the dashboard.
+2. Upgrade Cloudflare rate-limit policy later if you need a longer period or a custom counting expression.
 
 ## Worker Jobs
 

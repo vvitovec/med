@@ -4,18 +4,24 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-/opt/trust-coupons/repo}"
 cd "$PROJECT_DIR"
 
-if [[ ! -f apps/api/.env ]]; then
-  cp apps/api/.env.example apps/api/.env
-  echo "Created apps/api/.env. Fill DATABASE_URL, ADMIN_DATABASE_URL, ADMIN_SESSION_SECRET, and Supabase service credentials before rerunning."
+if [[ ! -f config/app.env ]]; then
+  cp config/app.env.example config/app.env
+  chmod 0600 config/app.env
+  echo "Created config/app.env. Fill DATABASE_URL, ADMIN_DATABASE_URL, ADMIN_SESSION_SECRET, and Supabase service credentials before rerunning."
   exit 1
 fi
 
+if [[ ! -f config/worker.env ]]; then
+  cp config/worker.env.example config/worker.env
+  chmod 0600 config/worker.env
+fi
+
 set -a
-source apps/api/.env
+source config/app.env
 set +a
 
 if [[ -z "${DATABASE_URL:-}" ]]; then
-  echo "DATABASE_URL is missing in apps/api/.env"
+  echo "DATABASE_URL is missing in config/app.env"
   exit 1
 fi
 

@@ -17,9 +17,9 @@ Facts:
 - Do not use Supabase Edge Functions.
 
 Tasks:
-1. Ensure the repo is present at /opt/trust-coupons/repo and pull the latest public GitHub version if remote is configured.
+1. Ensure the repo is present at /home/viktoor/srv/apps/trust-coupons/repo if that is the hostops-registered path. Pull the latest public GitHub version from https://github.com/vvitovec/med.git if remote is configured.
 2. Create a least-privilege Postgres runtime user for the API if missing.
-3. Fill /opt/trust-coupons/repo/apps/api/.env from .env.example:
+3. Fill config/app.env and config/worker.env from their examples:
    - API_HOST=127.0.0.1 or 0.0.0.0 only if Docker networking requires it
    - API_PORT=3100
    - DATABASE_URL for runtime DB user
@@ -31,7 +31,7 @@ Tasks:
    - SUPABASE_SERVICE_ROLE_KEY only if storage/feed import code needs it
 4. Apply db/migrations/001_initial_trust_coupons.sql and db/migrations/002_coupon_source_url_and_verified_state.sql.
 5. Ensure MinIO/Supabase Storage bucket trust-coupons exists and is private.
-6. Run npm ci, npm run build, npm run test, npm run seed:coupons -w @trust-coupons/api.
+6. Run npm ci, npm run build, npm run test, npm run seed:coupons.
 7. Start production API and worker with docker compose up -d api worker.
 8. Verify:
    - curl http://127.0.0.1:3100/healthz
