@@ -7,6 +7,15 @@ const defaultSettings = {
   privacyMode: "minimal" as PrivacyMode
 };
 
+type CheckoutState = {
+  coupons: RankedCoupon[];
+  merchantId: string;
+  region: "CZ" | "EU" | "US";
+  adapterId: string;
+};
+
+let checkoutState: CheckoutState | null = null;
+
 async function loadContentSettings() {
   const stored = await chrome.storage.sync.get(defaultSettings);
   return { ...defaultSettings, ...stored };
@@ -40,18 +49,31 @@ async function recordAttempt(attempt: CouponAttempt) {
   });
 }
 
-async function init() {
+async function loadCheckoutState(): Promise<CheckoutState | null> {
   const adapter = adapterForUrl(new URL(location.href), document);
-  if (!adapter) return;
+  if (!adapter) return null;
   const support = await resolveMerchant(location.hostname);
-  if (!support.supported || !support.merchant) return;
+  if (!support.supported || !support.merchant) return null;
   const { coupons } = await getCoupons(support.merchant.id, support.merchant.region);
-  if (coupons.length === 0) return;
-  mountOverlay(coupons, support.merchant.id, support.merchant.region, adapter.id);
+  if (coupons.length === 0) return null;
+  return {
+    coupons,
+    merchantId: support.merchant.id,
+    region: support.merchant.region,
+    adapterId: adapter.id
+  };
 }
 
-function mountOverlay(coupons: RankedCoupon[], merchantId: string, region: "CZ" | "EU" | "US", adapterId: string) {
-  if (document.getElementById("trust-coupons-overlay")) return;
+async function init() {
+  checkoutState = await loadCheckoutState();
+  if (!checkoutState) return;
+  mountOverlay(checkoutState);
+}
+
+function mountOverlay(state: CheckoutState) {
+  const existing = document.getElementById("trust-coupons-overlay");
+  if (existing) return existing;
+  const { coupons } = state;
   const root = document.createElement("div");
   root.id = "trust-coupons-overlay";
   const topCoupon = coupons[0];
@@ -78,11 +100,22 @@ function mountOverlay(coupons: RankedCoupon[], merchantId: string, region: "CZ" 
   document.documentElement.append(root);
   root.querySelector(".tc-close")?.addEventListener("click", () => root.remove());
   root.querySelector(".tc-primary")?.addEventListener("click", () => {
-    void testCoupons(root, coupons, merchantId, region, adapterId);
+    void testCoupons(root, state);
   });
+  return root;
 }
 
-async function testCoupons(root: HTMLElement, coupons: RankedCoupon[], merchantId: string, region: "CZ" | "EU" | "US", adapterId: string) {
+async function openTester(runImmediately: boolean) {
+  checkoutState ??= await loadCheckoutState();
+  if (!checkoutState) return { ok: false, reason: "No active coupons were found for this checkout page." };
+  const root = mountOverlay(checkoutState);
+  root.scrollIntoView({ block: "nearest", inline: "nearest" });
+  if (runImmediately) await testCoupons(root, checkoutState);
+  return { ok: true };
+}
+
+async function testCoupons(root: HTMLElement, state: CheckoutState) {
+  const { coupons, merchantId, region, adapterId } = state;
   const adapter = adapterForUrl(new URL(location.href), document);
   const progress = root.querySelector<HTMLElement>(".tc-progress");
   const stop = root.querySelector<HTMLButtonElement>(".tc-stop");
@@ -140,4 +173,12 @@ function escapeHtml(value: string) {
 
 void init().catch(() => {
   // Content scripts must fail closed so checkout pages keep working.
+});
+
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type !== "trust-coupons:open-tester" && message?.type !== "trust-coupons:test-now") return false;
+  openTester(message.type === "trust-coupons:test-now")
+    .then(sendResponse)
+    .catch((error) => sendResponse({ ok: false, reason: error instanceof Error ? error.message : "Unknown error" }));
+  return true;
 });
