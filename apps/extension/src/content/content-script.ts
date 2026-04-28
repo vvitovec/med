@@ -2,11 +2,6 @@ import { adapterForUrl } from "@trust-coupons/adapters";
 import type { CouponAttempt, MerchantSupportStatus, PrivacyMode, RankedCoupon } from "@trust-coupons/shared";
 import "./overlay.css";
 
-const defaultSettings = {
-  apiBaseUrl: "https://coupons-api.vvitovec.com",
-  privacyMode: "minimal" as PrivacyMode
-};
-
 type CheckoutState = {
   coupons: RankedCoupon[];
   merchantId: string;
@@ -17,36 +12,30 @@ type CheckoutState = {
 let checkoutState: CheckoutState | null = null;
 
 async function loadContentSettings() {
+  const defaultSettings = {
+    apiBaseUrl: "https://coupons-api.vvitovec.com",
+    privacyMode: "minimal" as PrivacyMode
+  };
   const stored = await chrome.storage.sync.get(defaultSettings);
   return { ...defaultSettings, ...stored };
 }
 
-async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
-  const settings = await loadContentSettings();
-  const response = await fetch(`${settings.apiBaseUrl}${path}`, {
-    ...init,
-    headers: {
-      "content-type": "application/json",
-      ...(init?.headers ?? {})
-    }
-  });
-  if (!response.ok) throw new Error(`API ${response.status}`);
-  return response.json() as Promise<T>;
-}
-
 async function resolveMerchant(domain: string) {
-  return apiRequest<MerchantSupportStatus>(`/api/v1/merchants/resolve?domain=${encodeURIComponent(domain)}`);
+  const response = await chrome.runtime.sendMessage({ type: "resolve-current-tab", domain }) as MerchantSupportStatus & { error?: string };
+  if (response.error) throw new Error(response.error);
+  return response;
 }
 
 async function getCoupons(merchantId: string, region: "CZ" | "EU" | "US") {
-  return apiRequest<{ coupons: RankedCoupon[] }>(`/api/v1/coupons?merchantId=${merchantId}&region=${region}`);
+  const response = await chrome.runtime.sendMessage({ type: "get-coupons", merchantId, region }) as { coupons: RankedCoupon[]; error?: string };
+  if (response.error) throw new Error(response.error);
+  return response;
 }
 
 async function recordAttempt(attempt: CouponAttempt) {
-  return apiRequest<{ ok: boolean; stored: boolean }>("/api/v1/coupon-attempts", {
-    method: "POST",
-    body: JSON.stringify(attempt)
-  });
+  const response = await chrome.runtime.sendMessage({ type: "record-attempt", attempt }) as { ok: boolean; stored: boolean; error?: string };
+  if (response.error) throw new Error(response.error);
+  return response;
 }
 
 async function loadCheckoutState(): Promise<CheckoutState | null> {
