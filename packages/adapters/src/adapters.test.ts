@@ -35,6 +35,11 @@ describe("merchant adapters", () => {
     expect(aboutYouAdapter.detect(new URL("https://www.aboutyou.cz/checkout/basket"), document)).toBe(true);
   });
 
+  it("does not show Notino checkout overlay on product discount badges", () => {
+    const document = doc('<div class="coupon-badge">176 Kč s kódem SALE</div>');
+    expect(notinoAdapter.detect(new URL("https://www.notino.cz/essence/product/p-16373872/"), document)).toBe(false);
+  });
+
   it("opens collapsed Notino coupon fields before applying a code", async () => {
     const document = doc(`
       <button id="reveal">Zadat slevový kód</button>

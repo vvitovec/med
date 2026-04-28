@@ -60,7 +60,6 @@ export function createHeuristicAdapter(config: {
       const hostMatched = config.domains.some((domain) => url.hostname === domain || url.hostname.endsWith(`.${domain}`));
       if (!hostMatched) return false;
       return config.selectors.checkoutPathHints.some((hint) => url.pathname.toLowerCase().includes(hint)) ||
-        Boolean(config.selectors.couponAreaSelectors && firstElement(document, config.selectors.couponAreaSelectors)) ||
         Boolean(this.findCouponInput(document));
     },
     findCouponInput(document) {
