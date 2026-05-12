@@ -14,7 +14,7 @@ enabled = true
 [mcp_servers.cloudflare-api]
 enabled = true
 
-[mcp_servers.supabase_home]
+[mcp_servers.basev]
 enabled = true
 
 [mcp_servers.abra_gen]
